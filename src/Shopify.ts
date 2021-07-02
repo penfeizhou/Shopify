@@ -1,4 +1,4 @@
-import { Panel, Group, navbar } from "doric";
+import { Panel, Group, navbar, notch } from "doric";
 import { MainLayout } from "./widgets/MainLayout";
 
 @Entry
@@ -9,5 +9,13 @@ class Shopify extends Panel {
   build(root: Group): void {
     const mainLayout = new MainLayout();
     mainLayout.in(root);
+    notch(context)
+      .inset()
+      .then(
+        (e) =>
+          (mainLayout.padding = {
+            bottom: e.bottom,
+          })
+      );
   }
 }

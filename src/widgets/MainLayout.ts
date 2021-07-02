@@ -3,11 +3,8 @@ import {
   VLayout,
   layoutConfig,
   stack,
-  hlayout,
   Color,
-  Stack,
-  HLayout,
-  modal,
+  text,
 } from "doric";
 import { TabLayout } from "./TabLayout";
 
@@ -15,8 +12,50 @@ import { TabLayout } from "./TabLayout";
 export class MainLayout extends VLayout {
   contentLayout = stack([], {
     layoutConfig: layoutConfig().mostWidth().configWeight(1),
+    backgroundColor: Color.WHITE,
   });
-
+  fragments = [
+    stack(
+      [
+        text({
+          text: "This is home",
+        }),
+      ],
+      {
+        layoutConfig: layoutConfig().most(),
+      }
+    ),
+    stack(
+      [
+        text({
+          text: "This is category",
+        }),
+      ],
+      {
+        layoutConfig: layoutConfig().most(),
+      }
+    ),
+    stack(
+      [
+        text({
+          text: "This is cart",
+        }),
+      ],
+      {
+        layoutConfig: layoutConfig().most(),
+      }
+    ),
+    stack(
+      [
+        text({
+          text: "This is my",
+        }),
+      ],
+      {
+        layoutConfig: layoutConfig().most(),
+      }
+    ),
+  ];
   tabLayout = new TabLayout([
     {
       title: "Home",
@@ -46,11 +85,18 @@ export class MainLayout extends VLayout {
   }
 
   build() {
+    this.fragments.forEach((e) => this.contentLayout.addChild(e));
     this.layoutConfig = layoutConfig().most();
+    this.backgroundColor = Color.parse("#eeeeee");
     this.addChild(this.contentLayout);
     this.addChild(this.tabLayout);
+    this.fragments.forEach((e, i) => {
+      e.hidden = 0 !== i;
+    });
     this.tabLayout.onTabSelected = (idx) => {
-      modal(context).alert(`Selected ${idx}`);
+      this.fragments.forEach((e, i) => {
+        e.hidden = idx !== i;
+      });
     };
   }
 }

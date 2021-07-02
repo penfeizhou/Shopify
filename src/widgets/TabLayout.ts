@@ -71,7 +71,6 @@ export class TabLayout extends HLayout {
     super();
     this.layoutConfig = layoutConfig().mostWidth().justHeight();
     this.height = 60;
-    this.backgroundColor = Color.parse("#eeeeee");
     this.items = data.map((e) => new TabItem(e));
     this.items.forEach((e, idx) => {
       e.onClick = () => {
