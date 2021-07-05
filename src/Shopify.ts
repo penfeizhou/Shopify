@@ -34,14 +34,12 @@ class Shopify extends ModularPanel {
       },
     ]);
     mainLayout.in(root);
-    notch(context)
-      .inset()
-      .then(
-        (e) =>
-          (mainLayout.padding = {
-            bottom: e.bottom,
-          })
-      );
+    this.addOnRenderFinishedCallback(async () => {
+      const e = await notch(context).inset();
+      mainLayout.padding = {
+        bottom: e.bottom,
+      };
+    });
     return mainLayout.contentLayout;
   }
   onShow() {
