@@ -18,6 +18,7 @@ import {
   ViewModel,
   VMPanel,
 } from "doric";
+import { API } from "../api/API";
 
 interface BannerModel {
   banners: { imageUrl: string }[];
@@ -33,7 +34,6 @@ class BannerVH extends ViewHolder {
           layoutConfig: layoutConfig().just(),
           width: Environment.screenWidth,
           height: 200,
-          loop: true,
         })),
         (this.indicator = hlayout([], {
           space: 5,
@@ -56,6 +56,13 @@ class BannerVH extends ViewHolder {
 
 class BannerVM extends ViewModel<BannerModel, BannerVH> {
   onAttached(state: BannerModel, vh: BannerVH) {
+    API.getTopSales(context).then((res) => {
+      this.updateState((state) => {
+        state.banners = res.map((e) => {
+          return { imageUrl: e.node.images.edges[0].node.transformedSrc };
+        });
+      });
+    });
     vh.sliderView.apply({
       renderPage: (idx: number) => {
         return slideItem(
@@ -69,23 +76,7 @@ class BannerVM extends ViewModel<BannerModel, BannerVH> {
           }
         );
       },
-      onClick: async () => {
-        const idx = await vh.sliderView.getSlidedPage(context);
-        modal(context).alert("Current is " + idx);
-      },
-      onPageSlided: (idx) => {
-        //this.updateState((state) => (state.index = idx - 1));
-      },
     });
-    // setInterval(() => {
-    //   this.updateState((state) => {
-    //     state.index++;
-    //     if (state.index >= state.banners.length) {
-    //       state.index = 0;
-    //     }
-    //   });
-    //   vh.sliderView.slidePage(context, state.index, true);
-    // }, 2000);
   }
   onBind(state: BannerModel, vh: BannerVH) {
     vh.sliderView.apply({
@@ -114,26 +105,7 @@ export class BannerPanel extends VMPanel<BannerModel, BannerVH> {
   }
   getState() {
     return {
-      banners: [
-        {
-          imageUrl: "https://eimg.smzdm.com/202107/01/60ddc5a2bb8bc2906.jpg",
-        },
-        {
-          imageUrl: "https://eimg.smzdm.com/202107/01/60ddc819ac3ac646.jpg",
-        },
-        {
-          imageUrl: "https://eimg.smzdm.com/202107/01/60ddc6b53ca777696.jpg",
-        },
-        {
-          imageUrl: "https://eimg.smzdm.com/202107/01/60dd9ffe30b446621.jpg",
-        },
-        {
-          imageUrl: "https://eimg.smzdm.com/202107/01/60ddb33550bd96693.jpg",
-        },
-        {
-          imageUrl: "https://eimg.smzdm.com/202107/01/60ddb92a8eb6b1661.jpg",
-        },
-      ],
+      banners: [],
       index: 0,
     };
   }

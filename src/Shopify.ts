@@ -18,7 +18,7 @@ class Shopify extends ModularPanel {
         iconHighlight: "image/home_h.png",
       },
       {
-        title: "Category",
+        title: "Collection",
         iconNormal: "image/category.png",
         iconHighlight: "image/category_h.png",
       },
